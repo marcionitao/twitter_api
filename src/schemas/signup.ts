@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+// ficheiro de validação
 export const signupSchema = z.object({
   email: z
     .string({ message: 'Email is required' })
