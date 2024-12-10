@@ -20,3 +20,4 @@ The Twitter Clone API is a REST API that allows users to create, read, update, a
 - cors + types
 - helmet
 - @prisma/client
+- Swagger + types

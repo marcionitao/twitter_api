@@ -2,8 +2,13 @@ import { Router } from 'express'
 import * as pingController from '../controllers/ping'
 import * as authController from '../controllers/auth'
 import { verifyJWT } from '../utils/jwt'
+import swaggerDocument from '../../swagger.json'
+import swaggerUi from 'swagger-ui-express'
 // criando nossas rotas
 export const mainRouter = Router()
+
+// configurando o swagger
+mainRouter.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // usando nossas rotas de ping definidas no controller
 mainRouter.get('/ping', pingController.ping)

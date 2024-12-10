@@ -10,7 +10,7 @@ app.use(cors()) // cors serve para permitir a comunicação entre o front e o 
 app.use(urlencoded({ extended: true })) // permitir que o servidor lide com requisições que contenham dados em formato de URL encoded, como formulários HTML.
 app.use(express.json()) //  o Express.js retorna uma resposta no formato JSON
 
-// usando rotas definidas no controller
+// usando rotas definidas no "routers/main.ts"
 app.use(mainRouter)
 
 // routers
