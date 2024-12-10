@@ -11,7 +11,7 @@ mainRouter.get('/ping', pingController.ping)
 // rota para criar usuario
 mainRouter.post('/auth/signup', authController.signup)
 // // rota para fazer login
-// mainRouter.post('/auth/signin')
+mainRouter.post('/auth/signin', authController.signin)
 // // rota para criar tweet
 // mainRouter.post('/tweet')
 // // rota para obter 1 tweet

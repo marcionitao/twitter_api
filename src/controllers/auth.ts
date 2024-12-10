@@ -2,8 +2,9 @@ import { RequestHandler } from 'express'
 import { signupSchema } from '../schemas/signup'
 import { createUser, findUserByEmail, findUserBySlug } from '../services/user'
 import slug from 'slug'
-import { hash } from 'bcrypt-ts'
+import { compare, hash } from 'bcrypt-ts'
 import { createJWT } from '../utils/jwt'
+import { signinSchema } from '../schemas/signin'
 
 export const signup: RequestHandler = async (req, res) => {
   // validar os dados do recebidos
@@ -61,6 +62,47 @@ export const signup: RequestHandler = async (req, res) => {
       name: newUser.name,
       slug: newUser.slug,
       avatar: newUser.avatar,
+    },
+  })
+}
+
+export const signin: RequestHandler = async (req, res) => {
+  // validar os dados do recebidos
+  const safeData = signinSchema.safeParse(req.body) // "safeParse" serve para validar os dados recebidos
+
+  if (!safeData.success) {
+    // "flatten().fieldErrors" serve para obter os erros de cada campo
+    res.json({ error: safeData.error.flatten().fieldErrors })
+    return
+  }
+
+  // verificar email(ou seja, se já existe um outro usuario com esse email)
+  const user = await findUserByEmail(safeData.data.email)
+
+  if (!user) {
+    res.status(401).json({ error: 'Access denied!' })
+    return
+  }
+
+  // verificar se a senha esta correta
+  // compara a senha recebida com a senha(hash) do user no DB
+  const verifyPass = await compare(safeData.data.password, user.password)
+
+  if (!verifyPass) {
+    res.status(401).json({ error: 'Access denied!' })
+    return
+  }
+
+  // após verificar se o email e a senha estao corretos, criar o token
+  const token = createJWT(user.slug)
+
+  // retornar o token e o usuario
+  res.json({
+    token,
+    user: {
+      name: user.name,
+      slug: user.slug,
+      avatar: user.avatar,
     },
   })
 }
