@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-// ficheiro de validação
+// ficheiro de validação para o signup(criar um novo usuario)
 export const signupSchema = z.object({
   email: z
     .string({ message: 'Email is required' })

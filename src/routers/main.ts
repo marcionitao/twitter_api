@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import * as pingController from '../controllers/ping'
 import * as authController from '../controllers/auth'
+import * as tweetController from '../controllers/tweet'
 import { verifyJWT } from '../utils/jwt'
 import swaggerDocument from '../../swagger.json'
 import swaggerUi from 'swagger-ui-express'
@@ -20,7 +21,7 @@ mainRouter.post('/auth/signup', authController.signup)
 mainRouter.post('/auth/signin', authController.signin)
 // --> Proteger as rotas abaixo com o middleware de autenticação
 // rota para criar tweet
-// mainRouter.post('/tweet')
+mainRouter.post('/tweet', verifyJWT, tweetController.addTweet)
 // rota para obter 1 tweet
 // mainRouter.get('/tweet/:id')
 // rota para obter as respostas de um tweet
