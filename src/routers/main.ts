@@ -23,7 +23,7 @@ mainRouter.post('/auth/signin', authController.signin)
 // rota para criar tweet
 mainRouter.post('/tweet', verifyJWT, tweetController.addTweet)
 // rota para obter 1 tweet
-// mainRouter.get('/tweet/:id')
+mainRouter.get('/tweet/:id', verifyJWT, tweetController.getTweet)
 // rota para obter as respostas de um tweet
 // mainRouter.get('/tweet/:id/answers')
 // rota para dar um like em um tweet
