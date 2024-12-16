@@ -47,3 +47,34 @@ export const createTweet = async (
 
   return newTweet
 }
+
+// precisamos buscar respostas de um determinado tweet
+export const findAnswersFromTweet = async (id: number) => {
+  // buscar as respostas de um ou mais tweets
+  const tweets = await prisma.tweet.findMany({
+    include: {
+      user: {
+        select: {
+          name: true,
+          avatar: true,
+          slug: true,
+        },
+      },
+      likes: {
+        select: {
+          userSlug: true,
+        },
+      },
+    },
+    where: {
+      answerOf: id,
+    },
+  })
+  // atualizar o avatar das respostas
+  for (const tweetIndex in tweets) {
+    tweets[tweetIndex].user.avatar = getPublicUrl(
+      tweets[tweetIndex].user.avatar,
+    )
+  }
+  return tweets
+}

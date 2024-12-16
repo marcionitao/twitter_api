@@ -1,5 +1,5 @@
 import { addTweetSchema } from '../schemas/add-tweet'
-import { createTweet, findTweet } from '../services/tweet'
+import { createTweet, findAnswersFromTweet, findTweet } from '../services/tweet'
 import { ExtendedRequest } from '../types/extended-request'
 import { Response } from 'express'
 import { addHashTag } from '../services/trend'
@@ -53,4 +53,13 @@ export const getTweet = async (req: ExtendedRequest, res: Response) => {
 
   // se encontrar, retornar o tweet
   res.json({ tweet })
+}
+
+export const getAnswers = async (req: ExtendedRequest, res: Response) => {
+  // obter o id do tweet
+  const { id } = req.params
+
+  // precisamos buscar respostas de um determinado tweet
+  const answers = await findAnswersFromTweet(parseInt(id))
+  res.json({ answers })
 }
