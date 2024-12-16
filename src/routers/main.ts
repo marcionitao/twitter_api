@@ -5,6 +5,7 @@ import * as tweetController from '../controllers/tweet'
 import { verifyJWT } from '../utils/jwt'
 import swaggerDocument from '../../swagger.json'
 import swaggerUi from 'swagger-ui-express'
+import * as userController from '../controllers/user'
 // criando nossas rotas
 export const mainRouter = Router()
 
@@ -29,7 +30,7 @@ mainRouter.get('/tweet/:id/answers', verifyJWT, tweetController.getAnswers)
 // rota para dar um like em um tweet
 mainRouter.post('/tweet/:id/like', verifyJWT, tweetController.likeToggle)
 // rota para obter dados de um usuario
-// mainRouter.get('/user/:slug')
+mainRouter.get('/user/:slug', verifyJWT, userController.getUser)
 // rota para obter os tweets de um usuario
 // mainRouter.get('/user/:slug/tweets')
 // rota seguir um usuario
