@@ -90,3 +90,39 @@ export const getUserTweetsCount = async (slug: string) => {
 
   return count
 }
+// verificar se um usuario segue outro
+export const checkIfFollows = async (user1Slug: string, user2Slug: string) => {
+  const follows = await prisma.follow.findFirst({
+    where: {
+      user1Slug,
+      user2Slug,
+    },
+  })
+
+  if (follows) {
+    return true
+  }
+  return false
+}
+
+// o usuario 1 segue o usuario 2
+export const follow = async (user1Slug: string, user2Slug: string) => {
+  const follows = await prisma.follow.create({
+    data: {
+      user1Slug,
+      user2Slug,
+    },
+  })
+
+  return follows
+}
+
+// o usuario 1 nao segue o usuario 2
+export const unfollow = async (user1Slug: string, user2Slug: string) => {
+  await prisma.follow.deleteMany({
+    where: {
+      user1Slug,
+      user2Slug,
+    },
+  })
+}
