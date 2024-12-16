@@ -1,5 +1,12 @@
 import { addTweetSchema } from '../schemas/add-tweet'
-import { createTweet, findAnswersFromTweet, findTweet } from '../services/tweet'
+import {
+  checkIfTweetIsLikeByUser,
+  createTweet,
+  findAnswersFromTweet,
+  findTweet,
+  likeTweet,
+  unLikeTweet,
+} from '../services/tweet'
 import { ExtendedRequest } from '../types/extended-request'
 import { Response } from 'express'
 import { addHashTag } from '../services/trend'
@@ -54,7 +61,7 @@ export const getTweet = async (req: ExtendedRequest, res: Response) => {
   // se encontrar, retornar o tweet
   res.json({ tweet })
 }
-
+// precisamos buscar respostas de um determinado tweet
 export const getAnswers = async (req: ExtendedRequest, res: Response) => {
   // obter o id do tweet
   const { id } = req.params
@@ -62,4 +69,24 @@ export const getAnswers = async (req: ExtendedRequest, res: Response) => {
   // precisamos buscar respostas de um determinado tweet
   const answers = await findAnswersFromTweet(parseInt(id))
   res.json({ answers })
+}
+// dar um like em um tweet
+export const likeToggle = async (req: ExtendedRequest, res: Response) => {
+  // obter o id do tweet
+  const { id } = req.params
+  // verificar se o tweet foi checked
+  const liked = await checkIfTweetIsLikeByUser(
+    req.userSlug as string,
+    parseInt(id),
+  )
+
+  if (liked) {
+    // se o tweet foi checked, vamos remover o like
+    unLikeTweet(req.userSlug as string, parseInt(id))
+  } else {
+    // se o tweet nao foi checked, vamos dar um like
+    likeTweet(req.userSlug as string, parseInt(id))
+  }
+
+  res.json({})
 }

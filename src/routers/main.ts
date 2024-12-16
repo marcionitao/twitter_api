@@ -27,7 +27,7 @@ mainRouter.get('/tweet/:id', verifyJWT, tweetController.getTweet)
 // rota para obter as respostas de um tweet
 mainRouter.get('/tweet/:id/answers', verifyJWT, tweetController.getAnswers)
 // rota para dar um like em um tweet
-// mainRouter.post('/tweet/:id/like')
+mainRouter.post('/tweet/:id/like', verifyJWT, tweetController.likeToggle)
 // rota para obter dados de um usuario
 // mainRouter.get('/user/:slug')
 // rota para obter os tweets de um usuario

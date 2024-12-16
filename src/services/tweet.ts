@@ -78,3 +78,38 @@ export const findAnswersFromTweet = async (id: number) => {
   }
   return tweets
 }
+
+// verificar se o tweet foi checked
+export const checkIfTweetIsLikeByUser = async (slug: string, id: number) => {
+  // verificar se o tweet existe no banco de dados
+  const isLiked = await prisma.tweetLike.findFirst({
+    where: {
+      userSlug: slug,
+      tweetId: id,
+    },
+  })
+  // return !!isLiked // se for diferente de null, retorna true
+  if (isLiked) {
+    return true
+  }
+  return false
+}
+
+// remover um like de um tweet
+export const unLikeTweet = async (slug: string, id: number) => {
+  await prisma.tweetLike.deleteMany({
+    where: {
+      userSlug: slug,
+      tweetId: id,
+    },
+  })
+}
+// dar um like em um tweet
+export const likeTweet = async (slug: string, id: number) => {
+  await prisma.tweetLike.create({
+    data: {
+      userSlug: slug,
+      tweetId: id,
+    },
+  })
+}
