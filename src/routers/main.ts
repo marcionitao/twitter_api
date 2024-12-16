@@ -32,7 +32,7 @@ mainRouter.post('/tweet/:id/like', verifyJWT, tweetController.likeToggle)
 // rota para obter dados de um usuario
 mainRouter.get('/user/:slug', verifyJWT, userController.getUser)
 // rota para obter os tweets de um usuario
-// mainRouter.get('/user/:slug/tweets')
+mainRouter.get('/user/:slug/tweets', verifyJWT, userController.getUserTweets)
 // rota seguir um usuario
 // mainRouter.post('/user/:slug/follow')
 // rota para atualizar o usuario

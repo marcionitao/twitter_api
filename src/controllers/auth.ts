@@ -7,7 +7,7 @@ import { createJWT } from '../utils/jwt'
 import { signinSchema } from '../schemas/signin'
 
 export const signup: RequestHandler = async (req, res) => {
-  // validar os dados do recebidos
+  // validar os dados do recebidos do Zod
   const safeData = signupSchema.safeParse(req.body) // "safeParse" serve para validar os dados recebidos
 
   if (!safeData.success) {

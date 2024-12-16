@@ -113,3 +113,32 @@ export const likeTweet = async (slug: string, id: number) => {
     },
   })
 }
+
+// funcionalidade de paginacao
+export const findTweetsByUser = async (
+  slug: string,
+  currentPage: number,
+  perPage: number,
+) => {
+  // buscar os tweets de um determinado usuario
+  const tweets = await prisma.tweet.findMany({
+    include: {
+      likes: {
+        select: {
+          userSlug: true,
+        },
+      },
+    },
+    where: {
+      userSlug: slug,
+      answerOf: 0, // tweet nao respondido
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    skip: currentPage * perPage, // pular os tweets anteriores, se currentPage = 1, pular 10 tweets
+    take: perPage, // pegar apenas 10 tweets
+  })
+
+  return tweets
+}
