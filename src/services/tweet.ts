@@ -142,3 +142,46 @@ export const findTweetsByUser = async (
 
   return tweets
 }
+
+// Encontranto os tweets do feed de um determinado usuario
+export const findTweetFeed = async (
+  following: string[],
+  currentPage: number,
+  perPage: number,
+) => {
+  const tweets = await prisma.tweet.findMany({
+    include: {
+      user: {
+        select: {
+          name: true,
+          avatar: true,
+          slug: true,
+        },
+      },
+      likes: {
+        select: {
+          userSlug: true,
+        },
+      },
+    },
+    where: {
+      userSlug: {
+        in: following, // peque onde o usuario que fez o tweet está numa lista
+      },
+      answerOf: 0, // tweet nao respondido
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    skip: currentPage * perPage, // pular os tweets anteriores, se currentPage = 1, pular 10 tweets
+    take: perPage, // pegar apenas 10 tweets
+  })
+  // função serve para obter a url publica e retornar url concatenada
+  for (const tweetIndex in tweets) {
+    tweets[tweetIndex].user.avatar = getPublicUrl(
+      tweets[tweetIndex].user.avatar,
+    )
+  }
+
+  return tweets
+}

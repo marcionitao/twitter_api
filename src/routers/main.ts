@@ -2,6 +2,7 @@ import { Router } from 'express'
 import * as pingController from '../controllers/ping'
 import * as authController from '../controllers/auth'
 import * as tweetController from '../controllers/tweet'
+import * as feedController from '../controllers/feed'
 import { verifyJWT } from '../utils/jwt'
 import swaggerDocument from '../../swagger.json'
 import swaggerUi from 'swagger-ui-express'
@@ -42,7 +43,7 @@ mainRouter.put('/user', verifyJWT, userController.updateUser)
 // rota para atualizar o cover do usuario
 // mainRouter.put('/user/cover')
 // rota para obter o feed
-// mainRouter.get('/feed')
+mainRouter.get('/feed', verifyJWT, feedController.getFeed)
 // rota para obter buscar
 // mainRouter.get('/search')
 // rota para obter os trendings

@@ -139,3 +139,20 @@ export const updateUserInfo = async (
     data,
   })
 }
+
+// Quais usuarios que eu sigo(mostrar a lista de feeds de tweets)
+export const getUserFollowing = async (slug: string) => {
+  const following = []
+  const reqFollow = await prisma.follow.findMany({
+    select: {
+      user2Slug: true,
+    },
+    where: {
+      user1Slug: slug,
+    },
+  })
+  for (const reqItem of reqFollow) {
+    following.push(reqItem.user2Slug)
+  }
+  return following
+}
