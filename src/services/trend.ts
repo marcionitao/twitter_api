@@ -27,3 +27,20 @@ export const addHashTag = async (hashtag: string) => {
     })
   }
 }
+
+// obter os trendings
+export const getTrending = async () => {
+  // obter os trendings do banco de dados
+  const trends = await prisma.trend.findMany({
+    select: {
+      hastag: true,
+      counter: true,
+    },
+    orderBy: {
+      counter: 'desc',
+    },
+    take: 4,
+  })
+
+  return trends
+}
