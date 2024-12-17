@@ -182,6 +182,48 @@ export const findTweetFeed = async (
       tweets[tweetIndex].user.avatar,
     )
   }
+  return tweets
+}
 
+// funcionalidade de busca de tweets com paginacao
+export const findTweetByBody = async (
+  bodyContains: string,
+  currentPage: number,
+  perPage: number,
+) => {
+  const tweets = await prisma.tweet.findMany({
+    include: {
+      user: {
+        select: {
+          name: true,
+          avatar: true,
+          slug: true,
+        },
+      },
+      likes: {
+        select: {
+          userSlug: true,
+        },
+      },
+    },
+    where: {
+      body: {
+        contains: bodyContains,
+        mode: 'insensitive',
+      },
+      answerOf: 0,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    skip: currentPage * perPage, // pular os tweets anteriores, se currentPage = 1, pular 10 tweets
+    take: perPage, // pegar apenas 10 tweets
+  })
+  // função serve para obter a url publica e retornar url concatenada
+  for (const tweetIndex in tweets) {
+    tweets[tweetIndex].user.avatar = getPublicUrl(
+      tweets[tweetIndex].user.avatar,
+    )
+  }
   return tweets
 }

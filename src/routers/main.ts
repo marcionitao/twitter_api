@@ -1,12 +1,15 @@
 import { Router } from 'express'
+import swaggerUi from 'swagger-ui-express'
 import * as pingController from '../controllers/ping'
 import * as authController from '../controllers/auth'
 import * as tweetController from '../controllers/tweet'
 import * as feedController from '../controllers/feed'
+import * as searchController from '../controllers/search'
+import * as userController from '../controllers/user'
+
 import { verifyJWT } from '../utils/jwt'
 import swaggerDocument from '../../swagger.json'
-import swaggerUi from 'swagger-ui-express'
-import * as userController from '../controllers/user'
+
 // criando nossas rotas
 export const mainRouter = Router()
 
@@ -45,7 +48,7 @@ mainRouter.put('/user', verifyJWT, userController.updateUser)
 // rota para obter o feed
 mainRouter.get('/feed', verifyJWT, feedController.getFeed)
 // rota para obter buscar
-// mainRouter.get('/search')
+mainRouter.get('/search', verifyJWT, searchController.searchTweets)
 // rota para obter os trendings
 // mainRouter.get('/trendings')
 // rota para obter as sugestoes
