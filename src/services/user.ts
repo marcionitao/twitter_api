@@ -126,3 +126,16 @@ export const unfollow = async (user1Slug: string, user2Slug: string) => {
     },
   })
 }
+
+// alterar os dados do usuario
+export const updateUserInfo = async (
+  slug: string,
+  data: Prisma.UserUpdateInput,
+) => {
+  await prisma.user.update({
+    where: {
+      slug,
+    },
+    data,
+  })
+}

@@ -36,7 +36,7 @@ mainRouter.get('/user/:slug/tweets', verifyJWT, userController.getUserTweets)
 // rota seguir um usuario
 mainRouter.post('/user/:slug/follow', verifyJWT, userController.followToggle)
 // rota para atualizar o usuario
-// mainRouter.put('/user')
+mainRouter.put('/user', verifyJWT, userController.updateUser)
 // rota para atualizar o avatar do usuario
 // mainRouter.put('/user/avatar')
 // rota para atualizar o cover do usuario

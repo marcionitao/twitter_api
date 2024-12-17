@@ -1,3 +1,4 @@
+import { updateUserSchema } from '../schemas/update-user'
 import { userTweetsSchema } from '../schemas/user-tweets'
 import { findTweetsByUser } from '../services/tweet'
 import {
@@ -8,6 +9,7 @@ import {
   getUserFollowingCount,
   getUserTweetsCount,
   unfollow,
+  updateUserInfo,
 } from '../services/user'
 import { ExtendedRequest } from '../types/extended-request'
 import { Response } from 'express'
@@ -70,4 +72,18 @@ export const followToggle = async (req: ExtendedRequest, res: Response) => {
     await unfollow(me, slug)
     res.json({ followed: false }) // eu nao sigo esse usuario
   }
+}
+
+export const updateUser = async (req: ExtendedRequest, res: Response) => {
+  // validar os dados do recebidos
+  const safeData = updateUserSchema.safeParse(req.body) // "safeParse" serve para validar os dados recebidos
+
+  if (!safeData.success) {
+    // "flatten().fieldErrors" serve para obter os erros de cada campo
+    res.json({ error: safeData.error.flatten().fieldErrors })
+    return
+  }
+
+  await updateUserInfo(req.userSlug as string, safeData.data)
+  res.json({})
 }
