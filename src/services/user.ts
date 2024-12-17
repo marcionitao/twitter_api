@@ -1,5 +1,5 @@
+import { prisma } from './../utils/prisma'
 import { Prisma } from '@prisma/client'
-import { prisma } from '../utils/prisma'
 import { getPublicUrl } from '../utils/url'
 
 export const findUserByEmail = async (email: string) => {
@@ -155,4 +155,31 @@ export const getUserFollowing = async (slug: string) => {
     following.push(reqItem.user2Slug)
   }
   return following
+}
+// Listar sugestões de usuarios que eu nao sigo
+export const getUserSuggestions = async (slug: string) => {
+  // obter os usuarios que eu sigo
+  const following = await getUserFollowing(slug)
+  // tenho que obter qualquer usuario que eu não sigo incluindo eu mesmo
+  const followingPlusMe = [...following, slug] // junta os dois arrays
+
+  // Criamos um type p/ obter Todos os campos de User pk o typescript nao identificar o conteudo SQL da query
+  type Suggestion = Pick<
+    Prisma.UserGetPayload<Prisma.UserDefaultArgs>,
+    'name' | 'avatar' | 'slug'
+  >
+  // definindo uma query para obter os usuarios que eu nao sigo aleatoriamente
+  const suggestions: Suggestion[] = await prisma.$queryRaw`
+    SELECT
+      name, avatar, slug
+    FROM "User"
+    WHERE 
+      slug NOT IN (${followingPlusMe.join(', ')})
+    ORDER BY RANDOM()
+    LIMIT 2
+  `
+
+  for (const sugIndex in suggestions) {
+    suggestions[sugIndex].avatar = getPublicUrl(suggestions[sugIndex].avatar)
+  }
 }

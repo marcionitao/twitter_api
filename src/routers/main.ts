@@ -7,6 +7,7 @@ import * as feedController from '../controllers/feed'
 import * as searchController from '../controllers/search'
 import * as userController from '../controllers/user'
 import * as trendController from '../controllers/trend'
+import * as suggestionController from '../controllers/suggestions'
 
 import { verifyJWT } from '../utils/jwt'
 import swaggerDocument from '../../swagger.json'
@@ -53,4 +54,4 @@ mainRouter.get('/search', verifyJWT, searchController.searchTweets)
 // rota para obter os trendings
 mainRouter.get('/trending', verifyJWT, trendController.getTrends)
 // rota para obter as sugestoes
-// mainRouter.get('/suggestions')
+mainRouter.get('/suggestions', verifyJWT, suggestionController.getSuggestions)
